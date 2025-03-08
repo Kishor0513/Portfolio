@@ -7,54 +7,54 @@ const Projects = () => {
       id: 1,
       title: "Bamboo Forest VR Experience",
       description:
-        "An immersive VR experience set in a bamboo forest with realistic physics and interactions.",
+        "An immersive VR experience set in a bamboo forest with realistic physics and interactions. Users can explore the environment and interact with pandas in their natural habitat.",
       image:
-        "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
+        "https://images.unsplash.com/photo-1564349683136-77e08dba1ef3?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60",
       tags: ["Three.js", "WebVR", "React"],
     },
     {
       id: 2,
       title: "Panda Chat App",
       description:
-        "A real-time chat application with cute panda-themed UI and animations.",
+        "A real-time chat application with cute panda-themed UI and animations. Features include message encryption, file sharing, and custom panda emojis.",
       image:
-        "https://images.unsplash.com/photo-1564349683136-77e08dba1ef3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80",
+        "https://images.unsplash.com/photo-1566207274740-0f8cf6b7d5a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60",
       tags: ["React", "Firebase", "CSS Animation"],
     },
     {
       id: 3,
       title: "Anime Character Creator",
       description:
-        "A web app that lets users create and customize anime-style characters with various options.",
+        "A web app that lets users create and customize anime-style panda characters with various options including outfits, accessories, and poses.",
       image:
-        "https://images.unsplash.com/photo-1578632767115-351597cf2477?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        "https://images.unsplash.com/photo-1525382455947-f319bc05fb35?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60",
       tags: ["JavaScript", "Canvas API", "GSAP"],
     },
     {
       id: 4,
       title: "3D Portfolio Template",
       description:
-        "A customizable 3D portfolio template for creative professionals with interactive elements.",
+        "A customizable 3D portfolio template for creative professionals with interactive elements and panda-themed animations that respond to user interactions.",
       image:
-        "https://images.unsplash.com/photo-1558655146-d09347e92766?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1527118732049-c88155f2107c?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60",
       tags: ["Three.js", "React", "Framer Motion"],
     },
     {
       id: 5,
       title: "Panda Game",
       description:
-        "A fun browser-based game where you play as a panda collecting bamboo and avoiding obstacles.",
+        "A fun browser-based game where you play as a panda collecting bamboo and avoiding obstacles. Features multiple levels and power-ups.",
       image:
-        "https://images.unsplash.com/photo-1566207274740-0f8cf6b7d5a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        "https://images.unsplash.com/photo-1591382386627-349b692688ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60",
       tags: ["JavaScript", "Phaser.js", "HTML5"],
     },
     {
       id: 6,
       title: "Weather App",
       description:
-        "A weather application with beautiful animations that change based on current weather conditions.",
+        "A weather application with beautiful panda animations that change based on current weather conditions. Includes forecast data and location-based services.",
       image:
-        "https://images.unsplash.com/photo-1530908295418-a12e326966ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80",
+        "https://images.unsplash.com/photo-1605336690991-0a59dc353602?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60",
       tags: ["React", "OpenWeather API", "CSS"],
     },
   ];
@@ -113,6 +113,9 @@ const Projects = () => {
               src={project.image}
               alt={project.title}
               className="project-image"
+              loading="lazy"
+              width="300"
+              height="200"
             />
             <div className="project-info">
               <h3 className="project-title">{project.title}</h3>
