@@ -9,7 +9,7 @@ const Projects = () => {
       description:
         "An immersive VR experience set in a bamboo forest with realistic physics and interactions. Users can explore the environment and interact with pandas in their natural habitat.",
       image:
-        "https://images.unsplash.com/photo-1564349683136-77e08dba1ef3?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60",
+        "https://unsplash.com/photos/panda-bear-sitting-on-bamboo-sticks-surrounded-with-trees-NsNRu6dfRds",
       tags: ["Three.js", "WebVR", "React"],
     },
     {
