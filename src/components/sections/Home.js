@@ -16,7 +16,7 @@ const Home = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
       >
-        Hello, I'm Panda Dev
+        Hello, I'm Kishor Dev
       </motion.h1>
 
       <motion.h2
