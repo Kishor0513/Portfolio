@@ -21,7 +21,7 @@ const Navbar = ({
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >
-        Panda Portfolio
+        Kishor Chaudhary 
       </motion.div>
       <div className="nav-links">
         <motion.button
