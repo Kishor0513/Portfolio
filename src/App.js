@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useEffect, useRef } from "react";
+import React, { Suspense, useState, useEffect, useRef, lazy } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Preload } from "@react-three/drei";
 import {
@@ -8,18 +8,22 @@ import {
   AnimatePresence,
 } from "framer-motion";
 
-// Components
-import Navbar from "./components/Navbar";
-import Home from "./components/sections/Home";
-import About from "./components/sections/About";
-import Projects from "./components/sections/Projects";
-import Contact from "./components/sections/Contact";
-import PandaModel from "./components/canvas/PandaModel";
-import Loader from "./components/Loader";
-
+// CSS imports
 import "./App.css";
 import "./components/SplitLayout.css";
 import "./ScrollFix.css";
+
+// Components
+import Navbar from "./components/Navbar";
+import Home from "./components/sections/Home";
+import Loader from "./components/Loader";
+import Home3D from "./components/sections/Home3D";
+
+// Lazy load components for better performance
+const About = lazy(() => import("./components/sections/About"));
+const Projects = lazy(() => import("./components/sections/Projects"));
+const Contact = lazy(() => import("./components/sections/Contact"));
+const PandaModel = lazy(() => import("./components/canvas/PandaModel"));
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -42,8 +46,19 @@ function App() {
   const pandaPositionX = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0]);
 
   useEffect(() => {
-    // Simulate loading time - reduced for better performance
-    const timer = setTimeout(() => setLoading(false), 1000);
+    // Set a minimum loading time of 1 second
+    const timer = setTimeout(() => {
+      // Check if all assets are loaded before hiding the loader
+      if (document.readyState === "complete") {
+        setLoading(false);
+      } else {
+        // For slow connections, add an event listener to hide loader when everything is loaded
+        const handleLoad = () => setLoading(false);
+        window.addEventListener("load", handleLoad);
+        return () => window.removeEventListener("load", handleLoad);
+      }
+    }, 1000);
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -57,7 +72,7 @@ function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Function to handle scroll events and update active section - optimized
+  // Function to handle scroll events and update active section - optimized with requestAnimationFrame
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + 100; // Adding offset for navbar
@@ -111,7 +126,7 @@ function App() {
       }
     };
 
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [activeSection]);
 
@@ -154,12 +169,19 @@ function App() {
           </motion.div>
 
           <div className="model-container">
-            <Suspense fallback={<Loader />}>
+            <Suspense fallback={null}>
               <Canvas
                 camera={{ position: [0, 0, 5], fov: 75 }}
-                style={{ width: "100%", height: "100%", position: "fixed" }}
+                style={{
+                  width: "40%",
+                  height: "100vh",
+                  position: "fixed",
+                  right: 0,
+                  top: 0,
+                  pointerEvents: "none",
+                }}
                 shadows
-                dpr={[1, 2]} // Optimize for different device pixel ratios
+                dpr={[1, 1.5]} // Reduced DPR for better performance
                 performance={{ min: 0.5 }} // Performance optimization
               >
                 <ambientLight intensity={0.5} />
@@ -198,75 +220,48 @@ function App() {
                 transition={{ duration: 0.8 }}
                 viewport={{ once: false, amount: 0.3 }}
               >
-                <div className="content-left">
-                  <Home />
-                </div>
-                <div className="content-right model-focus">
-                  <div className="home-model"></div>
-                </div>
+                <Home3D />
               </motion.section>
 
-              <motion.section
-                ref={aboutRef}
-                id="about"
-                className="section-container split-layout about-section"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: false, amount: 0.3 }}
+              <Suspense
+                fallback={<div className="section-loading">Loading...</div>}
               >
-                <div className="content-left-40 model-focus">
-                  <div className="image-container about-image">
-                    <img
-                      src="https://images.unsplash.com/photo-1527118732049-c88155f2107c?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60"
-                      alt="Cute panda"
-                      loading="lazy"
-                      width="400"
-                      height="400"
-                    />
-                  </div>
-                </div>
-                <div className="content-right-60">
+                <motion.section
+                  ref={projectsRef}
+                  id="projects"
+                  className="section-container full-width-section"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.8 }}
+                  viewport={{ once: false, amount: 0.3 }}
+                >
+                  <Projects />
+                </motion.section>
+
+                <motion.section
+                  ref={aboutRef}
+                  id="about"
+                  className="section-container full-width-section"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.8 }}
+                  viewport={{ once: false, amount: 0.3 }}
+                >
                   <About />
-                </div>
-              </motion.section>
+                </motion.section>
 
-              <motion.section
-                ref={projectsRef}
-                id="projects"
-                className="section-container full-width-section"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: false, amount: 0.3 }}
-              >
-                <Projects />
-              </motion.section>
-
-              <motion.section
-                ref={contactRef}
-                id="contact"
-                className="section-container split-layout contact-section"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: false, amount: 0.3 }}
-              >
-                <div className="content-left-40 model-focus">
-                  <div className="image-container contact-image">
-                    <img
-                      src="https://images.unsplash.com/photo-1525382455947-f319bc05fb35?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60"
-                      alt="Panda eating bamboo"
-                      loading="lazy"
-                      width="400"
-                      height="400"
-                    />
-                  </div>
-                </div>
-                <div className="content-right-60">
+                <motion.section
+                  ref={contactRef}
+                  id="contact"
+                  className="section-container full-width-section"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.8 }}
+                  viewport={{ once: false, amount: 0.3 }}
+                >
                   <Contact />
-                </div>
-              </motion.section>
+                </motion.section>
+              </Suspense>
             </AnimatePresence>
 
             {/* Footer */}

@@ -5,57 +5,63 @@ const Projects = () => {
   const projects = [
     {
       id: 1,
-      title: "Bamboo Forest VR Experience",
+      title: "Bamboo Forest VR",
       description:
-        "An immersive VR experience set in a bamboo forest with realistic physics and interactions. Users can explore the environment and interact with pandas in their natural habitat.",
+        "Immersive VR experience with realistic physics and panda interactions.",
       image:
-        "https://unsplash.com/photos/panda-bear-sitting-on-bamboo-sticks-surrounded-with-trees-NsNRu6dfRds",
+        "https://images.unsplash.com/photo-1566207274740-0f8cf6b7d5a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60",
       tags: ["Three.js", "WebVR", "React"],
+      link: "#",
     },
     {
       id: 2,
-      title: "Panda Chat App",
+      title: "Panda Chat",
       description:
-        "A real-time chat application with cute panda-themed UI and animations. Features include message encryption, file sharing, and custom panda emojis.",
+        "Real-time messaging with panda-themed UI, encryption and file sharing.",
       image:
         "https://images.unsplash.com/photo-1566207274740-0f8cf6b7d5a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60",
-      tags: ["React", "Firebase", "CSS Animation"],
+      tags: ["React", "Firebase", "CSS"],
+      link: "#",
     },
     {
       id: 3,
-      title: "Anime Character Creator",
+      title: "Anime Creator",
       description:
-        "A web app that lets users create and customize anime-style panda characters with various options including outfits, accessories, and poses.",
+        "Create custom anime-style panda characters with various customization options.",
       image:
         "https://images.unsplash.com/photo-1525382455947-f319bc05fb35?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60",
-      tags: ["JavaScript", "Canvas API", "GSAP"],
+      tags: ["JavaScript", "Canvas", "GSAP"],
+      link: "#",
     },
     {
       id: 4,
-      title: "3D Portfolio Template",
+      title: "3D Portfolio",
       description:
-        "A customizable 3D portfolio template for creative professionals with interactive elements and panda-themed animations that respond to user interactions.",
+        "Interactive 3D portfolio template with responsive panda animations.",
       image:
         "https://images.unsplash.com/photo-1527118732049-c88155f2107c?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60",
-      tags: ["Three.js", "React", "Framer Motion"],
+      tags: ["Three.js", "React", "Framer"],
+      link: "#",
     },
     {
       id: 5,
       title: "Panda Game",
       description:
-        "A fun browser-based game where you play as a panda collecting bamboo and avoiding obstacles. Features multiple levels and power-ups.",
+        "Browser game featuring a panda collecting bamboo with multiple levels.",
       image:
         "https://images.unsplash.com/photo-1591382386627-349b692688ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60",
-      tags: ["JavaScript", "Phaser.js", "HTML5"],
+      tags: ["JavaScript", "Phaser", "HTML5"],
+      link: "#",
     },
     {
       id: 6,
       title: "Weather App",
       description:
-        "A weather application with beautiful panda animations that change based on current weather conditions. Includes forecast data and location-based services.",
+        "Weather app with panda animations that change based on conditions.",
       image:
         "https://images.unsplash.com/photo-1605336690991-0a59dc353602?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60",
-      tags: ["React", "OpenWeather API", "CSS"],
+      tags: ["React", "API", "CSS"],
+      link: "#",
     },
   ];
 
@@ -88,13 +94,8 @@ const Projects = () => {
         animate={{ y: 0 }}
         transition={{ delay: 0.2, type: "spring" }}
       >
-        My Projects
+        Projects
       </motion.h1>
-
-      <p className="section-text">
-        Here are some of my recent projects. Each one represents a unique
-        challenge and learning experience.
-      </p>
 
       <motion.div
         className="projects-grid"
@@ -109,14 +110,21 @@ const Projects = () => {
             variants={item}
             whileHover={{ y: -10, transition: { duration: 0.2 } }}
           >
-            <img
-              src={project.image}
-              alt={project.title}
-              className="project-image"
-              loading="lazy"
-              width="300"
-              height="200"
-            />
+            <div className="project-image-container">
+              <img
+                src={project.image}
+                alt={project.title}
+                className="project-image"
+                loading="lazy"
+                width="300"
+                height="180"
+              />
+              <div className="project-overlay">
+                <a href={project.link} className="project-link-btn" aria-label="View project">
+                  <i className="fas fa-external-link-alt"></i>
+                </a>
+              </div>
+            </div>
             <div className="project-info">
               <h3 className="project-title">{project.title}</h3>
               <p className="project-description">{project.description}</p>
