@@ -15,15 +15,19 @@ const PandaModel = () => {
       group.current.position.y = Math.sin(t * 0.5) * 0.1;
 
       // Subtle rotation
-      group.current.rotation.y = Math.sin(t * 0.2) * 0.1;
+      group.current.rotation.y = Math.sin(t * 0.2) * 0.1 + Math.PI / 4;
     }
   });
+
+  // Responsive scaling
+  const scale = viewport.width < 768 ? 0.3 : 0.4;
 
   return (
     <group
       ref={group}
       position={[0, 0, 0]}
-      scale={viewport.width > 768 ? 0.5 : 0.4}
+      scale={scale}
+      rotation={[0, Math.PI / 4, 0]}
     >
       {/* Panda Body */}
       <mesh position={[0, 0, 0]} castShadow>

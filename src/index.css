@@ -8,42 +8,54 @@
   --text-color: #f5f5f7;
   --text-secondary: #b8b8c0;
   --border-color: rgba(255, 255, 255, 0.1);
-  
+
   /* Gradients */
-  --primary-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  --primary-gradient: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
   --accent-gradient: linear-gradient(135deg, var(--accent-color), #ff5e62);
-  --glass-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-  --vertical-gradient: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
-  
+  --glass-gradient: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  --vertical-gradient: linear-gradient(
+    to bottom,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+
   /* Typography */
-  --heading-font: 'Montserrat', sans-serif;
-  --body-font: 'Poppins', sans-serif;
+  --heading-font: "Montserrat", sans-serif;
+  --body-font: "Poppins", sans-serif;
   --h1-size: 3rem;
   --h2-size: 2.25rem;
   --h3-size: 1.5rem;
   --body-size: 1rem;
   --small-size: 0.875rem;
-  
+
   /* Spacing */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 1.5rem;
   --spacing-lg: 2rem;
   --spacing-xl: 3rem;
-  
+
   /* Borders */
   --border-radius-sm: 4px;
   --border-radius-md: 8px;
   --border-radius-lg: 16px;
   --border-radius-xl: 24px;
   --border-radius-full: 9999px;
-  
+
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.25);
   --shadow-primary: 0 5px 15px rgba(138, 43, 226, 0.3);
-  
+
   /* Animations */
   --transition-fast: 0.2s ease;
   --transition-normal: 0.3s ease;
@@ -61,7 +73,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
@@ -121,4 +133,28 @@ p,
   color: var(--text-color);
   background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
+}
+
+/* Animations */
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.heart {
+  display: inline-block;
+  animation: heartbeat 1.5s ease infinite;
 }

@@ -1,12 +1,8 @@
 import React, { Suspense, useState, useEffect, useRef, lazy } from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Preload } from "@react-three/drei";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  AnimatePresence,
-} from "framer-motion";
+import { motion, useScroll, AnimatePresence } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { debugSectionDetection } from "./debugging";
 
 // CSS imports
 import "./App.css";
@@ -17,12 +13,12 @@ import "./ScrollFix.css";
 import Navbar from "./components/Navbar";
 import Home from "./components/sections/Home";
 import Loader from "./components/Loader";
-import Home3D from "./components/sections/Home3D";
+import About from "./components/sections/About";
+import Projects from "./components/sections/Projects";
+import Contact from "./components/sections/Contact";
+import BackgroundCanvas from "./components/canvas/BackgroundCanvas";
 
 // Lazy load components for better performance
-const About = lazy(() => import("./components/sections/About"));
-const Projects = lazy(() => import("./components/sections/Projects"));
-const Contact = lazy(() => import("./components/sections/Contact"));
 const PandaModel = lazy(() => import("./components/canvas/PandaModel"));
 
 function App() {
@@ -35,15 +31,11 @@ function App() {
   const appRef = useRef(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // Scroll animation for panda model - optimized
-  const { scrollYProgress } = useScroll({
+  // For scroll tracking
+  useScroll({
     target: appRef,
     offset: ["start", "end"],
   });
-
-  const pandaScale = useTransform(scrollYProgress, [0, 1], [0.5, 0.3]);
-  const pandaRotateY = useTransform(scrollYProgress, [0, 1], [0, Math.PI * 2]);
-  const pandaPositionX = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0]);
 
   useEffect(() => {
     // Set a minimum loading time of 1 second
@@ -60,6 +52,12 @@ function App() {
     }, 1000);
 
     return () => clearTimeout(timer);
+  }, []);
+
+  // Debug section detection
+  useEffect(() => {
+    // Add this line to enable section detection debugging
+    debugSectionDetection();
   }, []);
 
   // Function to scroll to a section with animation
@@ -136,6 +134,9 @@ function App() {
         <Loader />
       ) : (
         <>
+          {/* Background Panda Model - Positioned at the top for proper layering */}
+          <BackgroundCanvas />
+
           <Navbar
             activeSection={activeSection}
             scrollToHome={() => scrollToSection(homeRef)}
@@ -165,49 +166,8 @@ function App() {
             }}
             onClick={scrollToTop}
           >
-            <i className="fas fa-arrow-up"></i>
+            <FontAwesomeIcon icon={faArrowUp} />
           </motion.div>
-
-          <div className="model-container">
-            <Suspense fallback={null}>
-              <Canvas
-                camera={{ position: [0, 0, 5], fov: 75 }}
-                style={{
-                  width: "40%",
-                  height: "100vh",
-                  position: "fixed",
-                  right: 0,
-                  top: 0,
-                  pointerEvents: "none",
-                }}
-                shadows
-                dpr={[1, 1.5]} // Reduced DPR for better performance
-                performance={{ min: 0.5 }} // Performance optimization
-              >
-                <ambientLight intensity={0.5} />
-                <directionalLight
-                  position={[0, 0, 5]}
-                  intensity={1}
-                  castShadow
-                />
-                <motion.group
-                  style={{
-                    scale: pandaScale,
-                    rotateY: pandaRotateY,
-                    x: pandaPositionX,
-                  }}
-                >
-                  <PandaModel />
-                </motion.group>
-                <OrbitControls
-                  enableZoom={false}
-                  maxPolarAngle={Math.PI / 2}
-                  minPolarAngle={Math.PI / 2}
-                />
-                <Preload all />
-              </Canvas>
-            </Suspense>
-          </div>
 
           <div className="content-container">
             <AnimatePresence>
@@ -220,7 +180,7 @@ function App() {
                 transition={{ duration: 0.8 }}
                 viewport={{ once: false, amount: 0.3 }}
               >
-                <Home3D />
+                <Home pandaModel={<PandaModel />} />
               </motion.section>
 
               <Suspense
@@ -259,7 +219,7 @@ function App() {
                   transition={{ duration: 0.8 }}
                   viewport={{ once: false, amount: 0.3 }}
                 >
-                  <Contact />
+                  <Contact contactRef={contactRef} />
                 </motion.section>
               </Suspense>
             </AnimatePresence>
@@ -267,12 +227,97 @@ function App() {
             {/* Footer */}
             <footer
               className="footer"
-              style={{ width: "100%", boxSizing: "border-box" }}
+              style={{
+                width: "100%",
+                boxSizing: "border-box",
+                padding: "2rem 1.5rem",
+                background:
+                  "linear-gradient(to bottom, rgba(30, 28, 76, 0.9), rgba(15, 14, 38, 1))",
+                borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+                textAlign: "center",
+                position: "relative",
+                overflow: "hidden",
+              }}
             >
-              <p>
-                Made with <span className="heart">❤</span> by Key Sho Wor &copy;{" "}
-                {new Date().getFullYear()}
-              </p>
+              {/* Decorative elements */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "-20px",
+                  left: "10%",
+                  width: "150px",
+                  height: "150px",
+                  borderRadius: "50%",
+                  background:
+                    "radial-gradient(circle, rgba(138, 43, 226, 0.15), transparent 70%)",
+                  filter: "blur(40px)",
+                  zIndex: 0,
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "-30px",
+                  right: "10%",
+                  width: "180px",
+                  height: "180px",
+                  borderRadius: "50%",
+                  background:
+                    "radial-gradient(circle, rgba(255, 105, 180, 0.15), transparent 70%)",
+                  filter: "blur(45px)",
+                  zIndex: 0,
+                }}
+              />
+
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "1rem",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "1.2rem",
+                      fontWeight: "600",
+                      background: "linear-gradient(135deg, #8A2BE2, #FF69B4)",
+                      WebkitBackgroundClip: "text",
+                      backgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    Kishor Chaudhary
+                  </div>
+
+                  <p
+                    style={{
+                      color: "rgba(255, 255, 255, 0.7)",
+                      margin: "0.5rem 0",
+                      fontSize: "0.95rem",
+                      maxWidth: "500px",
+                    }}
+                  >
+                    Made with{" "}
+                    <span
+                      className="heart"
+                      style={{
+                        color: "#ff6b6b",
+                        fontSize: "1.1rem",
+                        position: "relative",
+                        top: "2px",
+                        display: "inline-block",
+                        animation: "heartbeat 1.5s ease infinite",
+                      }}
+                    >
+                      ❤
+                    </span>{" "}
+                    by Kishor Chaudhary &copy; {new Date().getFullYear()}
+                  </p>
+                </div>
+              </div>
             </footer>
           </div>
         </>

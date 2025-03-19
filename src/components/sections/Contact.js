@@ -1,23 +1,26 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import {
+  FaMapMarkerAlt,
+  FaEnvelope,
+  FaPhoneAlt,
+  FaLinkedin,
+  FaGithub,
+  FaTwitter,
+} from "react-icons/fa";
 
-const Contact = () => {
+const Contact = ({ contactRef }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
     message: "",
   });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e) => {
@@ -27,236 +30,522 @@ const Contact = () => {
     // Simulate form submission
     setTimeout(() => {
       setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        message: "",
-      });
+      setSubmitSuccess(true);
+      setFormData({ name: "", email: "", message: "" });
 
-      // Reset success message after 5 seconds
+      // Reset success message after 3 seconds
       setTimeout(() => {
-        setIsSubmitted(false);
-      }, 5000);
+        setSubmitSuccess(false);
+      }, 3000);
     }, 1500);
   };
 
   const contactInfo = [
     {
-      icon: "fas fa-envelope",
-      label: "Email",
-      value: "panda@example.com",
-      link: "mailto:panda@example.com",
+      icon: <FaMapMarkerAlt />,
+      title: "Location",
+      text: "Kathmandu, Nepal",
     },
     {
-      icon: "fas fa-phone",
-      label: "Phone",
-      value: "+1 (123) 456-7890",
-      link: "tel:+11234567890",
+      icon: <FaEnvelope />,
+      title: "Email",
+      text: "kishor.chaudhary@example.com",
     },
     {
-      icon: "fas fa-map-marker-alt",
-      label: "Location",
-      value: "Kathmandu, Nepal",
-      link: "https://maps.google.com/?q=Kathmandu,Nepal",
+      icon: <FaPhoneAlt />,
+      title: "Phone",
+      text: "+977 9800123456",
     },
   ];
 
+  const socialLinks = [
+    {
+      icon: <FaLinkedin />,
+      link: "https://linkedin.com/",
+      color: "#0077B5",
+      name: "LinkedIn",
+    },
+    {
+      icon: <FaGithub />,
+      link: "https://github.com/",
+      color: "#333",
+      name: "GitHub",
+    },
+    {
+      icon: <FaTwitter />,
+      link: "https://twitter.com/",
+      color: "#1DA1F2",
+      name: "Twitter",
+    },
+  ];
+
+  const inputVariants = {
+    focus: {
+      scale: 1.02,
+      boxShadow: "0 5px 15px rgba(138, 43, 226, 0.15)",
+      borderColor: "rgba(255, 255, 255, 0.2)",
+    },
+  };
+
   return (
     <motion.div
-      className="section"
+      ref={contactRef}
+      id="contact"
+      className="contact-section"
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: true }}
+      style={{
+        padding: "6rem 2rem",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "relative",
+        background:
+          "linear-gradient(to bottom, rgba(30, 28, 76, 0.9), rgba(15, 14, 38, 0.8))",
+        overflow: "hidden",
+      }}
     >
-      <motion.h1
-        className="section-title"
-        initial={{ y: -30 }}
-        animate={{ y: 0 }}
-        transition={{ delay: 0.2, type: "spring" }}
-      >
-        Contact
-      </motion.h1>
+      {/* Background decorative elements */}
+      <motion.div
+        className="bg-decoration"
+        style={{
+          position: "absolute",
+          top: "10%",
+          left: "10%",
+          width: "250px",
+          height: "250px",
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(138, 43, 226, 0.15), transparent 70%)",
+          filter: "blur(60px)",
+          zIndex: 0,
+        }}
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+      />
+      <motion.div
+        className="bg-decoration"
+        style={{
+          position: "absolute",
+          bottom: "15%",
+          right: "10%",
+          width: "200px",
+          height: "200px",
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(255, 105, 180, 0.15), transparent 70%)",
+          filter: "blur(50px)",
+          zIndex: 0,
+        }}
+        animate={{
+          scale: [1, 1.3, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{
+          duration: 7,
+          delay: 1,
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+      />
 
-      <div className="contact-container">
-        <div className="contact-info-container">
-          <h3 className="contact-subtitle">Get in Touch</h3>
-          <p className="contact-text">
-            Feel free to reach out for collaborations, opportunities, or just to say hello!
+      {/* Contact container */}
+      <motion.div
+        className="contact-container"
+        style={{
+          width: "100%",
+          maxWidth: "1200px",
+          margin: "0 auto",
+          zIndex: 2,
+          display: "flex",
+          flexDirection: "column",
+          gap: "3rem",
+        }}
+      >
+        {/* Section title */}
+        <motion.div
+          className="section-title"
+          initial={{ y: 30, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+        >
+          <h2
+            style={{
+              fontSize: "2.5rem",
+              fontWeight: "800",
+              marginBottom: "1rem",
+              textAlign: "center",
+              background: "linear-gradient(135deg, #8A2BE2, #FF69B4)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              textShadow: "0px 0px 15px rgba(138, 43, 226, 0.3)",
+              position: "relative",
+            }}
+          >
+            Get In Touch
+            <motion.span
+              style={{
+                position: "absolute",
+                bottom: "-10px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                height: "4px",
+                width: "80px",
+                background: "linear-gradient(to right, #8A2BE2, #FF69B4)",
+                borderRadius: "2px",
+              }}
+              initial={{ width: 0 }}
+              whileInView={{ width: "80px" }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            />
+          </h2>
+          <p
+            style={{
+              fontSize: "1.1rem",
+              color: "rgba(255, 255, 255, 0.8)",
+              textAlign: "center",
+              maxWidth: "700px",
+              margin: "0 auto 2rem auto",
+              lineHeight: 1.7,
+            }}
+          >
+            Feel free to reach out for collaborations, opportunities, or just a
+            friendly chat!
           </p>
-          
-          <div className="contact-info-list">
-            {contactInfo.map((info, index) => (
-              <motion.a
-                key={index}
-                href={info.link}
-                className="contact-info-item"
-                target={info.icon === "fas fa-map-marker-alt" ? "_blank" : ""}
-                rel={info.icon === "fas fa-map-marker-alt" ? "noopener noreferrer" : ""}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + index * 0.1 }}
-                whileHover={{ 
-                  scale: 1.05,
-                  backgroundColor: "rgba(255, 255, 255, 0.1)"
+        </motion.div>
+
+        {/* Contact grid - Fixed layout */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "2rem",
+            width: "100%",
+          }}
+        >
+          {/* Contact information */}
+          <motion.div
+            className="contact-info"
+            initial={{ x: -30, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1.5rem",
+              padding: "1.5rem",
+              background: "rgba(255, 255, 255, 0.03)",
+              backdropFilter: "blur(10px)",
+              borderRadius: "var(--border-radius-lg)",
+              border: "1px solid rgba(255, 255, 255, 0.05)",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "1.5rem",
+                marginBottom: "1rem",
+                color: "#fff",
+              }}
+            >
+              Contact Information
+            </h3>
+
+            {/* Contact details */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.2rem",
+              }}
+            >
+              {contactInfo.map((info, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ x: -20, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.3, delay: 0.1 * index }}
+                  viewport={{ once: true }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                  }}
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                      background:
+                        "linear-gradient(135deg, rgba(138, 43, 226, 0.8), rgba(255, 105, 180, 0.8))",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "1.2rem",
+                      color: "#fff",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {info.icon}
+                  </motion.div>
+                  <div>
+                    <h4
+                      style={{
+                        margin: 0,
+                        fontSize: "1rem",
+                        color: "rgba(255, 255, 255, 0.9)",
+                      }}
+                    >
+                      {info.title}
+                    </h4>
+                    <p
+                      style={{
+                        margin: "0.3rem 0 0 0",
+                        fontSize: "0.95rem",
+                        color: "rgba(255, 255, 255, 0.7)",
+                      }}
+                    >
+                      {info.text}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Social links */}
+            <div style={{ marginTop: "1rem" }}>
+              <h4
+                style={{
+                  fontSize: "1.1rem",
+                  marginBottom: "1rem",
+                  color: "rgba(255, 255, 255, 0.9)",
                 }}
               >
-                <div className="contact-icon">
-                  <i className={info.icon}></i>
-                </div>
-                <div className="contact-details">
-                  <span className="contact-label">{info.label}</span>
-                  <span className="contact-value">{info.value}</span>
-                </div>
-              </motion.a>
-            ))}
-          </div>
-
-          <motion.div
-            className="social-links"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub"
-            >
-              <i className="fab fa-github"></i>
-            </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-            >
-              <i className="fab fa-linkedin"></i>
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Twitter"
-            >
-              <i className="fab fa-twitter"></i>
-            </a>
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-            >
-              <i className="fab fa-instagram"></i>
-            </a>
-          </motion.div>
-        </div>
-
-        <div className="contact-form-container">
-          {isSubmitted ? (
-            <motion.div
-              className="success-message"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <div className="success-icon">
-                <i className="fas fa-check-circle"></i>
+                Connect With Me
+              </h4>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "1rem",
+                }}
+              >
+                {socialLinks.map((social, index) => (
+                  <motion.a
+                    key={index}
+                    href={social.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    initial={{ y: 10, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.3, delay: 0.1 * index }}
+                    viewport={{ once: true }}
+                    whileHover={{ y: -5, scale: 1.1 }}
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "1.2rem",
+                      color: "#fff",
+                      background: `rgba(255, 255, 255, 0.1)`,
+                      border: `1px solid ${social.color}40`,
+                      transition: "all 0.3s ease",
+                      textDecoration: "none",
+                    }}
+                    aria-label={social.name}
+                  >
+                    {social.icon}
+                  </motion.a>
+                ))}
               </div>
-              <h3>Thank you!</h3>
-              <p>Your message has been sent successfully. I'll get back to you soon.</p>
-            </motion.div>
-          ) : (
-            <motion.form
-              className="contact-form"
-              onSubmit={handleSubmit}
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
+            </div>
+          </motion.div>
+
+          {/* Contact form */}
+          <motion.div
+            className="contact-form"
+            initial={{ x: 30, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            viewport={{ once: true }}
+            style={{
+              padding: "1.5rem",
+              background: "rgba(255, 255, 255, 0.03)",
+              backdropFilter: "blur(10px)",
+              borderRadius: "var(--border-radius-lg)",
+              border: "1px solid rgba(255, 255, 255, 0.05)",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "1.5rem",
+                marginBottom: "1.5rem",
+                color: "#fff",
+              }}
             >
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="name" className="form-label">
-                    Name
-                  </label>
+              Send Me a Message
+            </h3>
+
+            <form onSubmit={handleSubmit}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1.2rem",
+                }}
+              >
+                <motion.div
+                  whileHover="focus"
+                  variants={inputVariants}
+                  style={{
+                    position: "relative",
+                  }}
+                >
                   <input
                     type="text"
-                    id="name"
                     name="name"
-                    className="form-input"
                     value={formData.name}
                     onChange={handleChange}
+                    placeholder="Your Name"
                     required
+                    style={{
+                      width: "100%",
+                      padding: "0.8rem 1rem",
+                      fontSize: "1rem",
+                      background: "rgba(255, 255, 255, 0.05)",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      borderRadius: "8px",
+                      color: "#fff",
+                      outline: "none",
+                      transition: "all 0.3s ease",
+                      boxSizing: "border-box",
+                    }}
                   />
-                </div>
+                </motion.div>
 
-                <div className="form-group">
-                  <label htmlFor="email" className="form-label">
-                    Email
-                  </label>
+                <motion.div
+                  whileHover="focus"
+                  variants={inputVariants}
+                  style={{
+                    position: "relative",
+                  }}
+                >
                   <input
                     type="email"
-                    id="email"
                     name="email"
-                    className="form-input"
                     value={formData.email}
                     onChange={handleChange}
+                    placeholder="Your Email"
                     required
+                    style={{
+                      width: "100%",
+                      padding: "0.8rem 1rem",
+                      fontSize: "1rem",
+                      background: "rgba(255, 255, 255, 0.05)",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      borderRadius: "8px",
+                      color: "#fff",
+                      outline: "none",
+                      transition: "all 0.3s ease",
+                      boxSizing: "border-box",
+                    }}
                   />
-                </div>
-              </div>
+                </motion.div>
 
-              <div className="form-group">
-                <label htmlFor="phone" className="form-label">
-                  Phone Number (Optional)
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  className="form-input"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="+1 (123) 456-7890"
-                />
-              </div>
+                <motion.div
+                  whileHover="focus"
+                  variants={inputVariants}
+                  style={{
+                    position: "relative",
+                  }}
+                >
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Your Message"
+                    required
+                    style={{
+                      width: "100%",
+                      padding: "0.8rem 1rem",
+                      fontSize: "1rem",
+                      background: "rgba(255, 255, 255, 0.05)",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      borderRadius: "8px",
+                      color: "#fff",
+                      outline: "none",
+                      transition: "all 0.3s ease",
+                      minHeight: "150px",
+                      resize: "vertical",
+                      boxSizing: "border-box",
+                    }}
+                  ></textarea>
+                </motion.div>
 
-              <div className="form-group">
-                <label htmlFor="message" className="form-label">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  className="form-textarea"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows="5"
-                />
-              </div>
+                <motion.button
+                  type="submit"
+                  disabled={isSubmitting}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  style={{
+                    padding: "0.8rem 2rem",
+                    background: "linear-gradient(135deg, #8A2BE2, #FF69B4)",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "8px",
+                    fontSize: "1rem",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                    display: "inline-block",
+                    transition: "all 0.3s ease",
+                    boxShadow: "0 4px 15px rgba(138, 43, 226, 0.3)",
+                    alignSelf: "flex-start",
+                    opacity: isSubmitting ? 0.7 : 1,
+                  }}
+                >
+                  {isSubmitting ? "Sending..." : "Send Message"}
+                </motion.button>
 
-              <motion.button
-                type="submit"
-                className="submit-btn"
-                disabled={isSubmitting}
-                whileHover={{ scale: 1.05, boxShadow: "0 5px 15px rgba(138, 43, 226, 0.4)" }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {isSubmitting ? (
-                  <span className="loading-spinner">
-                    <i className="fas fa-spinner fa-spin"></i> Sending...
-                  </span>
-                ) : (
-                  "Send Message"
+                {submitSuccess && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    style={{
+                      padding: "0.8rem",
+                      background: "rgba(0, 200, 83, 0.1)",
+                      border: "1px solid rgba(0, 200, 83, 0.3)",
+                      borderRadius: "8px",
+                      color: "#00c853",
+                      fontSize: "0.9rem",
+                      marginTop: "1rem",
+                    }}
+                  >
+                    Your message has been sent successfully!
+                  </motion.div>
                 )}
-              </motion.button>
-            </motion.form>
-          )}
+              </div>
+            </form>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 };
