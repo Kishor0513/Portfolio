@@ -1,8 +1,7 @@
-import React, { Suspense, useState, useEffect, useRef, lazy } from "react";
-import { motion, useScroll, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, useScroll } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { debugSectionDetection } from "./debugging";
 
 // CSS imports
 import "./App.css";
@@ -16,10 +15,6 @@ import Loader from "./components/Loader";
 import About from "./components/sections/About";
 import Projects from "./components/sections/Projects";
 import Contact from "./components/sections/Contact";
-import BackgroundCanvas from "./components/canvas/BackgroundCanvas";
-
-// Lazy load components for better performance
-const PandaModel = lazy(() => import("./components/canvas/PandaModel"));
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -37,6 +32,22 @@ function App() {
     offset: ["start", "end"],
   });
 
+  // Fix viewport height on mobile (address iOS Safari issues)
+  useEffect(() => {
+    // Fix for mobile viewport height issues
+    const setVh = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    };
+
+    setVh();
+    window.addEventListener("resize", setVh);
+
+    return () => {
+      window.removeEventListener("resize", setVh);
+    };
+  }, []);
+
   useEffect(() => {
     // Set a minimum loading time of 1 second
     const timer = setTimeout(() => {
@@ -52,12 +63,6 @@ function App() {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
-
-  // Debug section detection
-  useEffect(() => {
-    // Add this line to enable section detection debugging
-    debugSectionDetection();
   }, []);
 
   // Function to scroll to a section with animation
@@ -134,9 +139,6 @@ function App() {
         <Loader />
       ) : (
         <>
-          {/* Background Panda Model - Positioned at the top for proper layering */}
-          <BackgroundCanvas />
-
           <Navbar
             activeSection={activeSection}
             scrollToHome={() => scrollToSection(homeRef)}
@@ -150,176 +152,138 @@ function App() {
             className={`scroll-to-top ${
               activeSection === "contact" ? "last-section" : ""
             }`}
-            initial={{ opacity: 0, scale: 0 }}
+            initial={{ opacity: 0, y: 100 }}
             animate={{
               opacity: showScrollTop ? 1 : 0,
-              scale: showScrollTop ? 1 : 0,
-              y: activeSection === "contact" ? [0, -10, 0] : 0,
+              y: showScrollTop ? 0 : 100,
             }}
-            transition={{
-              duration: 0.3,
-              y: {
-                duration: 1.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              },
-            }}
+            transition={{ duration: 0.5 }}
             onClick={scrollToTop}
           >
             <FontAwesomeIcon icon={faArrowUp} />
           </motion.div>
 
           <div className="content-container">
-            <AnimatePresence>
-              <motion.section
-                ref={homeRef}
-                id="home"
-                className="section-container split-layout"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: false, amount: 0.3 }}
-              >
-                <Home pandaModel={<PandaModel />} />
-              </motion.section>
+            <section className="section-container" id="home" ref={homeRef}>
+              <Home />
+            </section>
 
-              <Suspense
-                fallback={<div className="section-loading">Loading...</div>}
-              >
-                <motion.section
-                  ref={projectsRef}
-                  id="projects"
-                  className="section-container full-width-section"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ duration: 0.8 }}
-                  viewport={{ once: false, amount: 0.3 }}
-                >
-                  <Projects />
-                </motion.section>
+            <section className="section-container" id="about" ref={aboutRef}>
+              <About />
+            </section>
 
-                <motion.section
-                  ref={aboutRef}
-                  id="about"
-                  className="section-container full-width-section"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ duration: 0.8 }}
-                  viewport={{ once: false, amount: 0.3 }}
-                >
-                  <About />
-                </motion.section>
-
-                <motion.section
-                  ref={contactRef}
-                  id="contact"
-                  className="section-container full-width-section"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ duration: 0.8 }}
-                  viewport={{ once: false, amount: 0.3 }}
-                >
-                  <Contact contactRef={contactRef} />
-                </motion.section>
-              </Suspense>
-            </AnimatePresence>
-
-            {/* Footer */}
-            <footer
-              className="footer"
-              style={{
-                width: "100%",
-                boxSizing: "border-box",
-                padding: "2rem 1.5rem",
-                background:
-                  "linear-gradient(to bottom, rgba(30, 28, 76, 0.9), rgba(15, 14, 38, 1))",
-                borderTop: "1px solid rgba(255, 255, 255, 0.05)",
-                textAlign: "center",
-                position: "relative",
-                overflow: "hidden",
-              }}
+            <section
+              className="section-container"
+              id="projects"
+              ref={projectsRef}
             >
-              {/* Decorative elements */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: "-20px",
-                  left: "10%",
-                  width: "150px",
-                  height: "150px",
-                  borderRadius: "50%",
-                  background:
-                    "radial-gradient(circle, rgba(138, 43, 226, 0.15), transparent 70%)",
-                  filter: "blur(40px)",
-                  zIndex: 0,
-                }}
-              />
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "-30px",
-                  right: "10%",
-                  width: "180px",
-                  height: "180px",
-                  borderRadius: "50%",
-                  background:
-                    "radial-gradient(circle, rgba(255, 105, 180, 0.15), transparent 70%)",
-                  filter: "blur(45px)",
-                  zIndex: 0,
-                }}
-              />
+              <Projects />
+            </section>
 
-              <div style={{ position: "relative", zIndex: 1 }}>
+            <section
+              className="section-container"
+              id="contact"
+              ref={contactRef}
+            >
+              <Contact />
+            </section>
+          </div>
+
+          {/* Footer */}
+          <footer
+            className="footer"
+            style={{
+              width: "100%",
+              boxSizing: "border-box",
+              padding: "2rem 1.5rem",
+              background:
+                "linear-gradient(to bottom, rgba(30, 28, 76, 0.9), rgba(15, 14, 38, 1))",
+              borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+              textAlign: "center",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            {/* Decorative elements */}
+            <div
+              style={{
+                position: "absolute",
+                top: "-20px",
+                left: "10%",
+                width: "150px",
+                height: "150px",
+                borderRadius: "50%",
+                background:
+                  "radial-gradient(circle, rgba(138, 43, 226, 0.15), transparent 70%)",
+                filter: "blur(40px)",
+                zIndex: 0,
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: "-30px",
+                right: "10%",
+                width: "180px",
+                height: "180px",
+                borderRadius: "50%",
+                background:
+                  "radial-gradient(circle, rgba(255, 105, 180, 0.15), transparent 70%)",
+                filter: "blur(45px)",
+                zIndex: 0,
+              }}
+            />
+
+            <div style={{ position: "relative", zIndex: 1 }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "1rem",
+                }}
+              >
                 <div
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "1rem",
+                    fontSize: "1.2rem",
+                    fontWeight: "600",
+                    background: "linear-gradient(135deg, #8A2BE2, #FF69B4)",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    marginBottom: "0.5rem",
                   }}
                 >
-                  <div
-                    style={{
-                      fontSize: "1.2rem",
-                      fontWeight: "600",
-                      background: "linear-gradient(135deg, #8A2BE2, #FF69B4)",
-                      WebkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      marginBottom: "0.5rem",
-                    }}
-                  >
-                    Kishor Chaudhary
-                  </div>
-
-                  <p
-                    style={{
-                      color: "rgba(255, 255, 255, 0.7)",
-                      margin: "0.5rem 0",
-                      fontSize: "0.95rem",
-                      maxWidth: "500px",
-                    }}
-                  >
-                    Made with{" "}
-                    <span
-                      className="heart"
-                      style={{
-                        color: "#ff6b6b",
-                        fontSize: "1.1rem",
-                        position: "relative",
-                        top: "2px",
-                        display: "inline-block",
-                        animation: "heartbeat 1.5s ease infinite",
-                      }}
-                    >
-                      ❤
-                    </span>{" "}
-                    by Kishor Chaudhary &copy; {new Date().getFullYear()}
-                  </p>
+                  Kishor Chaudhary
                 </div>
+
+                <p
+                  style={{
+                    color: "rgba(255, 255, 255, 0.7)",
+                    margin: "0.5rem 0",
+                    fontSize: "0.95rem",
+                    maxWidth: "500px",
+                  }}
+                >
+                  Made with{" "}
+                  <span
+                    className="heart"
+                    style={{
+                      color: "#ff6b6b",
+                      fontSize: "1.1rem",
+                      position: "relative",
+                      top: "2px",
+                      display: "inline-block",
+                      animation: "heartbeat 1.5s ease infinite",
+                    }}
+                  >
+                    ❤
+                  </span>{" "}
+                  by Kishor Chaudhary &copy; {new Date().getFullYear()}
+                </p>
               </div>
-            </footer>
-          </div>
+            </div>
+          </footer>
         </>
       )}
     </div>

@@ -23,6 +23,7 @@
   --glass-effect: backdrop-filter: blur(12px);
   --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   --hover-transform: translateY(-5px);
+  --vh: 1vh; /* Used for mobile viewport height fix */
 
   /* Typography variables */
   --heading-font: "Montserrat", sans-serif;
@@ -58,9 +59,51 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Custom Scrollbar Styling - WebKit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 12px;
+  background-color: rgba(15, 14, 38, 0.5);
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(15, 14, 38, 0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  border-radius: 10px;
+  border: 2px solid rgba(15, 14, 38, 0.5);
+  background-size: 200% 200%;
+  animation: gradientScroll 3s ease infinite;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) rgba(15, 14, 38, 0.3);
+}
+
+@keyframes gradientScroll {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .App {
   width: 100%;
-  height: 100vh;
+  height: 100vh; /* Fallback */
+  height: calc(var(--vh, 1vh) * 100); /* Mobile viewport fix */
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
@@ -320,14 +363,6 @@ html {
   box-shadow: 0 15px 30px rgba(255, 107, 107, 0.7);
 }
 
-/* Model Container */
-.model-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
 /* Content Container */
 .content-container {
   position: relative;
@@ -349,11 +384,11 @@ html {
 }
 
 .content-left {
-  width: 60%;
-  padding: 4rem;
+  width: 100%;
+  padding: 2rem;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
 }
 
@@ -375,8 +410,8 @@ html {
   transition: transform 0.5s ease;
   position: relative;
   margin: 0 auto;
-  padding: 5rem 2rem;
   max-width: 1400px;
+  box-sizing: border-box;
 }
 
 .section-container:before {
@@ -409,6 +444,7 @@ html {
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
   width: 100%;
+  overflow: hidden;
 }
 
 .section:hover {
@@ -492,10 +528,18 @@ html {
   display: flex;
   width: 100%;
   align-items: center;
+  justify-content: center;
+  height: 100vh;
+  min-height: 600px;
 }
 
 .home-content {
   max-width: 800px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .main-title {
@@ -760,10 +804,12 @@ html {
   
   .main-title {
     font-size: 2.5rem;
+    text-align: center;
   }
   
   .subtitle {
     font-size: 1.1rem;
+    text-align: center;
   }
   
   .btn {
@@ -777,137 +823,182 @@ html {
   
   .content-left, .content-right {
     width: 100%;
-    padding: 2rem;
+    padding: 1.5rem 1rem;
   }
   
   .section-container {
     padding: 5rem 1.5rem 2rem;
+    min-height: 100vh;
   }
   
   .section {
     padding: 1.5rem;
+    margin: 0 0.5rem;
+    width: calc(100% - 1rem);
   }
   
   .projects-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
-}
-
-/* Enhanced Dropdown Menu */
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  width: 250px;
-  background: rgba(10, 10, 30, 0.95);
-  backdrop-filter: blur(15px);
-  border-radius: 20px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 
-              0 0 30px rgba(138, 43, 226, 0.4),
-              inset 0 2px 2px rgba(255, 255, 255, 0.1);
-  overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transform-origin: top right;
-  padding: 15px 0;
-  z-index: 1000;
-}
-
-.dropdown-item {
-  padding: 16px 22px;
-  color: var(--text-color);
-  display: flex;
+  
+  /* Stack Home content and Contact layout on mobile */
+  .home-content {
+    flex-direction: column !important;
+  }
+  
+  .home-content .content-left,
+  .home-content .content-right {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 2rem;
   align-items: center;
-  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-  position: relative;
-  overflow: hidden;
-  margin: 6px 10px;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-.dropdown-item:after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 10%;
-  width: 80%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.3), transparent);
-}
-
-.dropdown-item:last-child:after {
-  display: none;
-}
-
-.dropdown-item:hover {
-  background: rgba(138, 43, 226, 0.2);
-  transform: translateX(8px) scale(1.02);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.dropdown-item::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 5px;
-  background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
-  transform: scaleY(0);
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-  border-radius: 0 3px 3px 0;
-}
-
-.dropdown-item:hover::before {
-  transform: scaleY(1);
-}
-
-.dropdown-item i,
-.dropdown-item svg {
-  margin-right: 15px;
-  font-size: 1.3rem;
-  color: var(--secondary-color);
-  transition: all 0.4s ease;
-  width: 26px;
-  height: 26px;
+  }
+  
+  .home-content .content-left h1,
+  .home-content .content-left p {
+    text-align: center !important;
+  }
+  
+  .home-content .content-left div {
+    justify-content: center !important;
+  }
+  
+  /* Stack Contact components on mobile */
+  #contact .contact-container > div {
+    flex-direction: column !important;
+  }
+  
+  #contact .contact-info,
+  #contact .contact-form {
+    max-width: 100% !important;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Make home description centered on mobile */
+  .home-content p {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Ensure all sections are visible on mobile */
+  #about, #projects, #contact {
+    min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 6px;
-}
-
-.dropdown-item:hover i,
-.dropdown-item:hover svg {
-  transform: rotate(15deg) scale(1.2);
-  color: var(--primary-color);
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
-}
-
-.dropdown-item span {
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.dropdown-item:hover span {
-  color: white;
-  transform: translateX(5px);
-  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
-}
-
-/* Animation for dropdown menu items */
-@keyframes dropdownItemAppear {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
+    padding-top: 5rem;
   }
-  to {
-    opacity: 1;
-    transform: translateX(0);
+}
+
+/* Enhanced responsive styles for mobile */
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 2rem;
+    text-align: center;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .navbar {
+    padding: 1rem 1rem;
+  }
+  
+  .home-container {
+    padding: 0 0.5rem;
+  }
+  
+  .cta-buttons {
+    justify-content: center;
+  }
+  
+  .section-container {
+    padding: 4.5rem 0.5rem 1.5rem;
+  }
+  
+  .content-left, 
+  .content-right {
+    padding: 1rem 0.5rem;
+  }
+  
+  .social-links {
+    justify-content: center;
+  }
+  
+  .model-container {
+    height: auto; /* Remove fixed height */
+  }
+  
+  .project-card {
+    padding: 0.75rem;
+  }
+  
+  .project-title {
+    font-size: 1.2rem;
+  }
+  
+  .project-description {
+    font-size: 0.9rem;
+  }
+  
+  .section {
+    padding: 1.25rem;
+    margin: 0 0.25rem;
+    width: calc(100% - 0.5rem);
+  }
+  
+  /* Fix About and Projects sections visibility */
+  #about, #projects, #contact {
+    padding-top: 5rem;
+    padding-bottom: 2rem;
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+}
+
+/* Fix specific display issues for the smallest devices */
+@media (max-width: 360px) {
+  .main-title {
+    font-size: 1.8rem;
+  }
+  
+  .section-title {
+    font-size: 1.3rem !important;
+  }
+  
+  .btn {
+    padding: 0.4rem 0.8rem !important;
+    font-size: 0.75rem !important;
+    margin-bottom: 0.3rem;
+  }
+  
+  .cta-buttons {
+    gap: 0.5rem;
+  }
+  
+  .nav-links {
+    gap: 0.5rem !important;
+  }
+  
+  .skill-progress {
+    height: 6px;
+  }
+  
+  .skill-header span {
+    font-size: 0.7rem;
+  }
+  
+  .section {
+    padding: 1rem;
+    margin: 0 0.15rem;
+  }
+  
+  /* Further fix for the smallest screens */
+  .section-container {
+    padding: 4rem 0.25rem 1rem;
   }
 }

@@ -9,7 +9,7 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 
-const Contact = ({ contactRef }) => {
+const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -89,7 +89,6 @@ const Contact = ({ contactRef }) => {
 
   return (
     <motion.div
-      ref={contactRef}
       id="contact"
       className="contact-section"
       initial={{ opacity: 0 }}
@@ -97,7 +96,7 @@ const Contact = ({ contactRef }) => {
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
       style={{
-        padding: "6rem 2rem",
+        padding: "6rem 1rem",
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
@@ -165,7 +164,7 @@ const Contact = ({ contactRef }) => {
         className="contact-container"
         style={{
           width: "100%",
-          maxWidth: "1200px",
+          maxWidth: "1600px",
           margin: "0 auto",
           zIndex: 2,
           display: "flex",
@@ -228,16 +227,18 @@ const Contact = ({ contactRef }) => {
           </p>
         </motion.div>
 
-        {/* Contact grid - Fixed layout */}
+        {/* Contact left-right layout */}
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
             gap: "2rem",
             width: "100%",
+            padding: "0",
           }}
         >
-          {/* Contact information */}
+          {/* Contact information - Left side */}
           <motion.div
             className="contact-info"
             initial={{ x: -30, opacity: 0 }}
@@ -247,17 +248,21 @@ const Contact = ({ contactRef }) => {
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "1.5rem",
-              padding: "1.5rem",
-              background: "rgba(255, 255, 255, 0.03)",
+              gap: "1.8rem",
+              padding: "3.5rem",
+              background: "rgba(255, 255, 255, 0.05)",
               backdropFilter: "blur(10px)",
               borderRadius: "var(--border-radius-lg)",
-              border: "1px solid rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+              height: "100%",
+              flex: "1",
+              maxWidth: "49%",
             }}
           >
             <h3
               style={{
-                fontSize: "1.5rem",
+                fontSize: "1.7rem",
                 marginBottom: "1rem",
                 color: "#fff",
               }}
@@ -270,7 +275,7 @@ const Contact = ({ contactRef }) => {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "1.2rem",
+                gap: "1.5rem",
               }}
             >
               {contactInfo.map((info, index) => (
@@ -379,7 +384,7 @@ const Contact = ({ contactRef }) => {
             </div>
           </motion.div>
 
-          {/* Contact form */}
+          {/* Contact form - Right side */}
           <motion.div
             className="contact-form"
             initial={{ x: 30, opacity: 0 }}
@@ -387,17 +392,21 @@ const Contact = ({ contactRef }) => {
             transition={{ duration: 0.5, delay: 0.3 }}
             viewport={{ once: true }}
             style={{
-              padding: "1.5rem",
-              background: "rgba(255, 255, 255, 0.03)",
+              padding: "3.5rem",
+              background: "rgba(255, 255, 255, 0.05)",
               backdropFilter: "blur(10px)",
               borderRadius: "var(--border-radius-lg)",
-              border: "1px solid rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+              height: "100%",
+              flex: "1",
+              maxWidth: "49%",
             }}
           >
             <h3
               style={{
-                fontSize: "1.5rem",
-                marginBottom: "1.5rem",
+                fontSize: "1.7rem",
+                marginBottom: "1.8rem",
                 color: "#fff",
               }}
             >
@@ -409,7 +418,7 @@ const Contact = ({ contactRef }) => {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: "1.2rem",
+                  gap: "1.5rem",
                 }}
               >
                 <motion.div
@@ -428,11 +437,11 @@ const Contact = ({ contactRef }) => {
                     required
                     style={{
                       width: "100%",
-                      padding: "0.8rem 1rem",
-                      fontSize: "1rem",
+                      padding: "1rem 1.2rem",
+                      fontSize: "1.1rem",
                       background: "rgba(255, 255, 255, 0.05)",
                       border: "1px solid rgba(255, 255, 255, 0.1)",
-                      borderRadius: "8px",
+                      borderRadius: "12px",
                       color: "#fff",
                       outline: "none",
                       transition: "all 0.3s ease",
@@ -457,11 +466,11 @@ const Contact = ({ contactRef }) => {
                     required
                     style={{
                       width: "100%",
-                      padding: "0.8rem 1rem",
-                      fontSize: "1rem",
+                      padding: "1rem 1.2rem",
+                      fontSize: "1.1rem",
                       background: "rgba(255, 255, 255, 0.05)",
                       border: "1px solid rgba(255, 255, 255, 0.1)",
-                      borderRadius: "8px",
+                      borderRadius: "12px",
                       color: "#fff",
                       outline: "none",
                       transition: "all 0.3s ease",
@@ -485,15 +494,15 @@ const Contact = ({ contactRef }) => {
                     required
                     style={{
                       width: "100%",
-                      padding: "0.8rem 1rem",
-                      fontSize: "1rem",
+                      padding: "1rem 1.2rem",
+                      fontSize: "1.1rem",
                       background: "rgba(255, 255, 255, 0.05)",
                       border: "1px solid rgba(255, 255, 255, 0.1)",
-                      borderRadius: "8px",
+                      borderRadius: "12px",
                       color: "#fff",
                       outline: "none",
                       transition: "all 0.3s ease",
-                      minHeight: "150px",
+                      minHeight: "180px",
                       resize: "vertical",
                       boxSizing: "border-box",
                     }}
@@ -506,19 +515,20 @@ const Contact = ({ contactRef }) => {
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
                   style={{
-                    padding: "0.8rem 2rem",
+                    padding: "1rem 2.5rem",
                     background: "linear-gradient(135deg, #8A2BE2, #FF69B4)",
                     color: "#fff",
                     border: "none",
-                    borderRadius: "8px",
-                    fontSize: "1rem",
+                    borderRadius: "12px",
+                    fontSize: "1.1rem",
                     fontWeight: "600",
                     cursor: "pointer",
                     display: "inline-block",
                     transition: "all 0.3s ease",
-                    boxShadow: "0 4px 15px rgba(138, 43, 226, 0.3)",
+                    boxShadow: "0 6px 20px rgba(138, 43, 226, 0.4)",
                     alignSelf: "flex-start",
                     opacity: isSubmitting ? 0.7 : 1,
+                    marginTop: "0.5rem",
                   }}
                 >
                   {isSubmitting ? "Sending..." : "Send Message"}

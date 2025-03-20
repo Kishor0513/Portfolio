@@ -135,7 +135,7 @@ const Navbar = ({
           textShadow: "0 0 20px rgba(138, 43, 226, 0.3)",
         }}
       >
-        Kishor Chaudhary
+        Key Sho Wor
       </motion.div>
 
       {/* Desktop Navigation */}

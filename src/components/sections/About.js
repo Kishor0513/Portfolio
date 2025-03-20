@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const About = ({ aboutRef }) => {
+const About = () => {
   const skills = [
     { name: "React", level: 90 },
     { name: "JavaScript", level: 85 },
@@ -15,7 +15,6 @@ const About = ({ aboutRef }) => {
 
   return (
     <motion.div
-      ref={aboutRef}
       id="about"
       className="section"
       initial={{ opacity: 0 }}
